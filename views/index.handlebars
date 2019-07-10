@@ -1,0 +1,49 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+<ul>
+  {{#each list}}
+  <li>{{burger}}</li>
+  <button id='{{id}}' class="delete">Eat Me</button>
+
+  <form class="updateForm">
+    <button data-test="{{id}}" class="update" type='submit'>Update</button>
+  </form>
+
+  {{/each}}
+</ul>
+
+<form action="/" method="POST">
+  <input type="text" name="example">
+  <button type="submit">Submit</button>
+</form>
+
+
+<script type="text/javascript">
+
+  $('.delete').on('click', (event) => {
+    event.preventDefault
+    let id = (event.target.id)
+
+    $.ajax('/api/' + id, {
+      type: 'DELETE'
+    }).then(function () {
+      location.reload();
+    })
+  })
+
+
+  $('.updateForm').on('submit', (event) => {
+    event.preventDefault();
+    var id = event.target.children[0].dataset.test
+    let text = "updated"
+    console.log(id, text)
+
+    $.ajax('/api/' + id + '/' + text + '/', {
+      type: 'PUT'
+    }).then(function () {
+      location.reload()
+    })
+  })
+
+</script>
