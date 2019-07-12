@@ -15,13 +15,19 @@ app.use(express.json());
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-var connection = mysql.createConnection({
-  host: "localhost",
-  port: 3306,
-  user: "root",
-  password: "Passwordsucks!1",
-  database: "PRACTICE_DB"
-});
+var connection;
+if (process.env.JAWSDB_URL) {
+  connection = mysql.createConnection(rocess.env.JAWSDB_URL)
+}
+else {
+  connection = mysql.createConnection({
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "Passwordsucks!1",
+    database: "PRACTICE_DB"
+  });
+}
 
 connection.connect(function (err) {
   if (err) {
