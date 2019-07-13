@@ -1,0 +1,22 @@
+.uneaten{
+  color:green;
+}
+.eaten{
+  color:red;
+}
+
+body{
+  background: url('../images/background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.container-main{
+  display:flex;
+  flex-direction:row;
+  justify-content:flex-end;
+}
+
+.submit-group{
+  margin-left:3vw;
+}

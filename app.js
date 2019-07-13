@@ -11,13 +11,14 @@ var PORT = process.env.PORT || 8080;
 // Parse request body as JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static("public"));
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 var connection;
 if (process.env.JAWSDB_URL) {
-  connection = mysql.createConnection(rocess.env.JAWSDB_URL)
+  connection = mysql.createConnection(process.env.JAWSDB_URL)
 }
 else {
   connection = mysql.createConnection({
@@ -40,13 +41,26 @@ connection.connect(function (err) {
 
 
 app.get('/', (req, res) => {
+  let eaten = []
+  let notEaten = []
   let query = connection.query('SELECT * FROM practice', (err, data) => {
-    res.render('index', { list: data })
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].eaten === 0) {
+        eaten.push(data[i])
+      }
+      else {
+        notEaten.push(data[i])
+      }
+    }
+    res.render('index', {
+      list1: eaten,
+      list2: notEaten
+    })
   })
 })
 
 app.post('/', (req, res) => {
-  let query = connection.query('INSERT INTO practice(burger,eaten)VALUES(?,?)', [req.body.example, 'no'], (err, data) => {
+  let query = connection.query('INSERT INTO practice(burger,eaten)VALUES(?,?)', [req.body.example, 0], (err, data) => {
     if (err) throw err;
     res.redirect('/')
   })
@@ -57,7 +71,7 @@ app.post('/', (req, res) => {
 
 app.delete('/api/:id', (req, res) => {
   let delId = req.params.id;
-  connection.query('DELETE FROM practice WHERE id=?', [delId], (err, data) => {
+  connection.query('UPDATE PRACTICE SET eaten = true WHERE id=?', [delId], (err, data) => {
     if (err) throw err;
     res.render('index', data)
   })
@@ -67,10 +81,19 @@ app.delete('/api/:id', (req, res) => {
 app.put('/api/:id/:text', (req, res) => {
   let id = req.params.id
   let text = req.params.text;
-  console.log(req.params)
   connection.query('UPDATE practice set burger = ? WHERE id=?', [text, id], (err, data) => {
     if (err) throw err;
     res.render('index', data)
+  })
+})
+
+app.post('/api/remake/:id', (req, res) => {
+  let id = req.params.id
+  console.log(id)
+  connection.query('UPDATE practice SET eaten = 0 WHERE id=?', [id], (err, data) => {
+    if (err) throw err;
+    res.render('index', data)
+
   })
 })
 
