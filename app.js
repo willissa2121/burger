@@ -23,7 +23,7 @@ if (process.env.JAWSDB_URL) {
 else {
   connection = mysql.createConnection({
     host: "localhost",
-    port: 3306,
+    port: PORT,
     user: "root",
     password: "Passwordsucks!1",
     database: "PRACTICE_DB"
@@ -98,5 +98,5 @@ app.post('/api/remake/:id', (req, res) => {
 })
 
 app.listen(3000, () => {
-  console.log('listening in on port 3k')
+  console.log('listening in on port ' + PORT)
 })
