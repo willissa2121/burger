@@ -6,7 +6,7 @@ var app = express();
 
 // Set the port of our application
 // process.env.PORT lets the port be set by Heroku
-var PORT = process.env.PORT || 8080;
+var PORT = process.env.PORT || 3000;
 
 // Parse request body as JSON
 app.use(express.urlencoded({ extended: true }));
@@ -23,7 +23,7 @@ if (process.env.JAWSDB_URL) {
 else {
   connection = mysql.createConnection({
     host: "localhost",
-    port: PORT,
+    port: 3306,
     user: "root",
     password: "Passwordsucks!1",
     database: "PRACTICE_DB"
